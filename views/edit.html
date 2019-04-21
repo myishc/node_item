@@ -30,6 +30,9 @@
       text-decoration: none;
       color: yellowgreen;
     }
+    .heroIcon{
+      width: 150px;
+    }
   </style>
 </head>
 
@@ -89,16 +92,18 @@
                     placeholder="请输入技能">
                 </div>
               </div>
+              
               <div class="form-group">
                 <label for="icon" class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
                   <input required type="file" class="form-control" id="heroIcon" name="heroIcon" />
+                  <img src="" alt="" class="heroIcon">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <button type="submit" class="btn btn-default">保存</button>
-                  <button type="button" class="btn btn-cancel">取消</button>
+                  <a href="./index.html" class="btn btn-cancel">取消</a>
                 </div>
               </div>
             </form>
@@ -126,6 +131,7 @@
 
   complieHeroData()
   getHeroData()
+  loadHeroIcon()
 
   function getHeroData(){
     $.ajax({
@@ -137,12 +143,22 @@
         console.log(data);
         $('#heroName').val(data.heroName)
         $('#skillName').val(data.skillName)
+        $('.heroIcon').attr('src',data.heroIcon)
       }
     })
   }
 
-  
+  //加载图片
+function loadHeroIcon (){
+  $('#heroIcon').change(function(e){
+    console.log(e);
+    const url = URL.createObjectURL(e.target.files[0])
+    // console.log(url);
+    $('.heroIcon').attr('src',url)
+  })
 
+}
+  
   //点击编辑
   function complieHeroData() {
 

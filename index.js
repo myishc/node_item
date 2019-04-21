@@ -78,20 +78,33 @@ app.post('/addHero', upload.single('heroIcon'), (req, res) => {
 app.post('/updateHero', upload.single('heroIcon'), (req, res) => {
     const heroName = req.body.heroName,
         skillName = req.body.skillName,
-        heroIcon = path.join('imgs', req.file.filename),
         id = req.body.id
-
-    mongodb.update('cqlist',{_id:mongodb.ObjectId(id)},{
-        heroName,
-        skillName,
-        heroIcon
-    }, result => {
-        console.log(result);
-        res.send({
-            mes: '修改成功',
-            code: 200
+        // console.log(req.file);
+    if(req.file){
+       const heroIcon = path.join('imgs', req.file.filename)
+        mongodb.update('cqlist',{_id:mongodb.ObjectId(id)},{
+            heroName,
+            skillName,
+            heroIcon
+        }, result => {
+            // console.log(result);
+            res.send({
+                mes: '修改成功',
+                code: 200
+            })
         })
-    })
+    }else{
+        mongodb.update('cqlist',{_id:mongodb.ObjectId(id)},{
+            heroName,
+            skillName
+        }, result => {
+            console.log(result);
+            res.send({
+                mes: '修改成功',
+                code: 200
+            })
+        })
+    }
 })
 
 //删除英雄逻辑
