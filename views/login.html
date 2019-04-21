@@ -20,7 +20,8 @@
     .login-panel {
       margin-top: 200px;
     }
-    .vCode{
+
+    .vCode {
       height: 36px;
       cursor: pointer;
     }
@@ -36,17 +37,19 @@
             <h3 class="panel-title">登录英雄管理系统</h3>
           </div>
           <div class="panel-body">
-            <form action="#" method="post"  class="form-horizontal">
+            <form action="#" method="post" class="form-horizontal">
               <div class="form-group">
                 <label for="userName" class="col-sm-2 control-label">用户名</label>
                 <div class="col-sm-10">
-                  <input type="text" name="userName" value="赵*天" class="form-control" id="userName" placeholder="请输入用户名">
+                  <input type="text" name="userName" value="" class="form-control userName" id="userName"
+                    placeholder="请输入用户名">
                 </div>
               </div>
               <div class="form-group">
                 <label for="userPass" class="col-sm-2 control-label">密码</label>
                 <div class="col-sm-10">
-                  <input type="password" name="userPass" value="1234" class="form-control" id="userPass" placeholder="请输入密码">
+                  <input type="password" name="userPass" value="" class="form-control password" id="password"
+                    placeholder="请输入密码">
                 </div>
               </div>
               <div class="form-group">
@@ -55,7 +58,7 @@
                   <input type="text" name="vCode" class="form-control" id="vCode" placeholder="请输入验证码">
                 </div>
                 <div class="col-sm-4">
-                  <img class='vCode' src="./lib/img/code.png" alt="">
+                  <img class='vCode' src="/captcha" alt="">
                 </div>
               </div>
               <div class="form-group">
@@ -78,3 +81,19 @@
 <script src="./lib/bootstrap/js/jquery-1.12.4.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+
+<script>
+  $(function () {
+
+    //获取验证码
+    geyCaptcha()
+
+    //获取验证码
+    function geyCaptcha() {
+      $('.vCode').click(function () {
+        $(this).attr('src', `/captcha?${Date.now()}`)
+      })
+    }
+  })
+</script>
