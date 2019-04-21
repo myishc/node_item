@@ -140,6 +140,10 @@
         id
       },
       success: data=>{
+        if(data.code==403){
+            location =  'login.html'
+            return
+        }
         console.log(data);
         $('#heroName').val(data.heroName)
         $('#skillName').val(data.skillName)
@@ -169,7 +173,7 @@ function loadHeroIcon (){
       heroData.append('id', id)
       console.log(heroData);
       $.ajax({
-        url: '/updateHero',
+        url: '/heroUpdate',
         type: 'post',
         data: heroData,
         contentType: false,

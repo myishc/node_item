@@ -30,7 +30,8 @@
       text-decoration: none;
       color: yellowgreen;
     }
-    .heroIcon{
+
+    .heroIcon {
       width: 150px;
     }
   </style>
@@ -122,6 +123,21 @@
 <script>
   AddHero()
   loadHeroIcon()
+  userLogout()
+  function userLogout() {
+
+    $.ajax({
+      url: '/heroUser',
+      success: row => {
+        if(row.code==403){
+          location = './login.html'
+        }
+      }
+    })
+  }
+
+
+
 
   function AddHero() {
     $('.btnAddHero').click(function (e) {
@@ -129,12 +145,13 @@
       console.log($('#heroIcon'));
 
       $.ajax({
-        url: 'addHero',
+        url: 'heroAdd',
         type: 'post',
         contentType: false,
         processData: false,
         data: new FormData($('form')[0]),
         success: row => {
+          console.log(row);
           alert(row.mes)
           location = 'index.html'
         }
@@ -142,17 +159,17 @@
 
     })
 
-   
+
   }
 
-   //加载图片
-   function loadHeroIcon() {
-      $('#heroIcon').change(function (e) {
-        console.log(e);
-        const url = URL.createObjectURL(e.target.files[0])
-        // console.log(url);
-        $('.heroIcon').attr('src', url)
-      })
+  //加载图片
+  function loadHeroIcon() {
+    $('#heroIcon').change(function (e) {
+      console.log(e);
+      const url = URL.createObjectURL(e.target.files[0])
+      // console.log(url);
+      $('.heroIcon').attr('src', url)
+    })
 
-    }
+  }
 </script>

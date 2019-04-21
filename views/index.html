@@ -43,6 +43,11 @@
       width: 50px;
       height: 50px;
     }
+    .userName{
+      font-weight: 800;
+      color: yellow;
+      font-size: 18px;
+    }
   </style>
 </head>
 
@@ -67,8 +72,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <p class="navbar-text navbar-right " style="font-weight: 700">
-                欢迎 【jack】登录
-                <a href="./login.html" class="logout">退出</a>
+                欢迎 <span class="userName">jack</span>登录
+                <a href="#" class="logOut">退出</a>
               </p>
             </div>
             <!-- /.navbar-collapse -->
@@ -169,13 +174,13 @@
 
     const index = new Index()
 
-      //获取英雄列表
-    index.getHeroListData(()=>{
+    //获取英雄列表
+    index.getHeroListData(() => {
       //上一页下一页事件
       index.UpDownPageData()
 
       //搜索框点击事件   //删除英雄数据
-    }).searchHeroData().deleteHeroData()
+    }).searchHeroData().deleteHeroData().userLogout()
 
   })
 
@@ -203,41 +208,46 @@
         },
         success: data => {
           console.log(data);
+          if(data.mes){
+            location =  'login.html'
+            return
+          }
           $('tbody').html(template('heroList', data))
           that.totalPage = data.totalPage
           $('.page-num>a').html(that.pageNum + '/' + data.totalPage)
           callback && callback()
+          $('.userName').html(location.search.split('=')[1])
         }
       })
       return this
     },
 
     //上一页,下一页
-    UpDownPageData(){
-      const that =this
-      $('.pagination li').eq(0).click(function(e){
+    UpDownPageData() {
+      const that = this
+      $('.pagination li').eq(0).click(function (e) {
         that.pageNum--
-        if(that.pageNum==0){
-          that.pageNum=that.totalPage
+        if (that.pageNum == 0) {
+          that.pageNum = that.totalPage
         }
         that.getHeroListData()
       })
 
-      $('.pagination li').eq(2).click(function(){
+      $('.pagination li').eq(2).click(function () {
         that.pageNum++
-        if(that.pageNum==that.totalPage+1){
-          that.pageNum=1
+        if (that.pageNum == that.totalPage + 1) {
+          that.pageNum = 1
         }
         that.getHeroListData()
       })
       return this
     },
 
-    
+
     //点击搜索
-    searchHeroData(){
+    searchHeroData() {
       const that = this
-      $('form').submit(function(e){
+      $('form').submit(function (e) {
         e.preventDefault()
         that.pageNum = 1
         that.getHeroListData()
@@ -246,26 +256,40 @@
     },
 
     //点击删除英雄
-    deleteHeroData(){
+    deleteHeroData() {
       const that = this
-      $('tbody').on('click','.btnDelete',function(){
-          const id = $(this).data('id')
-          if(confirm('你这样点下去他可能会die,亲')){
-            $.ajax({
-              url: '/deleteHero',
-              data:{
-                id
-              },
-              success: row =>{
-                that.getHeroListData()
-              }
-            })
+      $('tbody').on('click', '.btnDelete', function () {
+        const id = $(this).data('id')
+        if (confirm('你这样点下去他可能会die,亲')) {
+          $.ajax({
+            url: '/heroDelete',
+            data: {
+              id
+            },
+            success: row => {
+              that.getHeroListData()
+            }
+          })
+        }
+      })
+      return this
+    },
+
+    userLogout() {
+      $('.logOut').click(function (e) {
+        e.preventDefault()
+        $.ajax({
+          url: '/heroUserLogout',
+          success: row => {
+            location = './login.html'
           }
+        })
       })
       return this
     },
 
     
+
 
 
   }
